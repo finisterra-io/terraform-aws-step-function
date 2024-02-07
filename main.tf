@@ -1,17 +1,3 @@
-data "aws_caller_identity" "current" {}
-
-
-locals {
-  create_role = var.create && var.create_role && !var.use_existing_role
-
-  enable_logging = try(var.logging_configuration["level"], "OFF") != "OFF"
-
-  enable_xray_tracing = try(var.service_integrations["xray"]["xray"], false) == true
-
-
-  role_name = local.create_role ? coalesce(var.role_name, var.name) : null
-}
-
 resource "aws_sfn_state_machine" "this" {
   count = var.create ? 1 : 0
 
